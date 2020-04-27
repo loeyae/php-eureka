@@ -1,1 +1,1 @@
-php-eureka
+php eureka client demo
