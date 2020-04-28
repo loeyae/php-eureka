@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-eureka-deployment
+  labels:
+    app: php-eureka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: php-eureka
+  template:
+    metadata:
+      labels:
+        app: php-eureka
+    spec:
+      nodeSelector:
+        kubernetes.io/os: linux
+      containers:
+        - name: php-eureka
+          image: php-eureka:last
+          command: ["php","/var/work/Application.php","$ENV"]
+          ports:
+            - containerPort: 8080
+              name: port-8080
+          env:
+            - name: ENV
+              value: test
+          volumeMounts:
+            - name: tz-log
+              mountPath: /var/log/
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - php
+                  - /var/work/remove.php
+      volumes:
+        - name: tz-log
+          hostPath:
+            path: /var/log/php-eureka/
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: php-eureka
+  name: php-eureka
+spec:
+  ports:
+    - port: 8080
+      name: port-8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: php-eureka
+  externalIPs:
+    - 192.168.1.220
