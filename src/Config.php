@@ -10,7 +10,11 @@
 
 namespace loeye;
 
-
+/**
+ * Class Config
+ *
+ * @package loeye
+ */
 class Config
 {
 
