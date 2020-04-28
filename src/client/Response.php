@@ -18,7 +18,6 @@ class Response
     /**
      * @var string
      */
-    private $body;
     private $protocol;
     private $version;
     private $code;
@@ -182,22 +181,13 @@ class Response
         return $this;
     }
 
-    /**
-     * @param string $body
-     * @return Response
-     */
-    public function setBody(string $body): Response
-    {
-        $this->body = $body;
-        return $this;
-    }
 
     /**
      * @return string|null
      */
     public function getBody(): ?string
     {
-        return $this->body ?? implode('', $this->getChunks());
+        return implode('', $this->getChunks());
     }
 
     /**
